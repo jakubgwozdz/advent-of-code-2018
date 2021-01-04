@@ -5,16 +5,21 @@ def process(current, line):
         return current - int(line[1:])
 
 
-if __name__ == '__main__':
+def read_input():
     with open('data/input1.txt') as f:
-        changes = f.read().splitlines()
+        lines = f.read().splitlines()
+    return lines
 
+
+def part1():
     freq = 0
-    for change in changes:
+    for change in read_input():
         freq = process(freq, change)
+    return freq
 
-    print(freq)
 
+def part2():
+    changes = read_input()
     found = set()
     freq = 0
     index = 0
@@ -24,5 +29,9 @@ if __name__ == '__main__':
         index = index + 1
         if index >= len(changes):
             index = 0
+    return freq
 
-    print(freq)
+
+if __name__ == '__main__':
+    print(part1())
+    print(part2())
