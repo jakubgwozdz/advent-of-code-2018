@@ -11,15 +11,14 @@ def read_input():
     return lines
 
 
-def part1():
+def part1(changes):
     freq = 0
-    for change in read_input():
+    for change in changes:
         freq = process(freq, change)
     return freq
 
 
-def part2():
-    changes = read_input()
+def part2(changes):
     found = set()
     freq = 0
     index = 0
@@ -33,5 +32,5 @@ def part2():
 
 
 if __name__ == '__main__':
-    print(part1())
-    print(part2())
+    print(part1(read_input()))
+    print(part2(read_input()))

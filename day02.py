@@ -9,8 +9,7 @@ def read_input():
     return lines
 
 
-def part1():
-    boxes = read_input()
+def part1(boxes):
     twos = 0
     threes = 0
     for box in boxes:
@@ -25,8 +24,7 @@ def part1():
     return twos * threes
 
 
-def part2():
-    boxes = read_input()
+def part2(boxes):
     for box1 in boxes:
         for box2 in boxes:
             c = 0
@@ -48,5 +46,5 @@ def part2():
 
 
 if __name__ == '__main__':
-    print(part1())
-    print(part2())
+    print(part1(read_input()))
+    print(part2(read_input()))
