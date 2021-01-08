@@ -7,9 +7,11 @@ def read_input():
     return lines
 
 
-def react(line):
+def react(line, *, ignore=''):
     stack = deque()
     for i in line:
+        if i.lower() == ignore:
+            pass
         if len(stack) == 0:
             stack.append(i)
         else:
@@ -17,26 +19,32 @@ def react(line):
             if i.lower() != ii.lower() or i == ii:
                 stack.append(ii)
                 stack.append(i)
-    return len(stack)
+    return stack
 
 
 def part1(lines):
-    return react(lines[0])
+    return len(react(lines[0]))
 
 
 def part2(lines):
     line = lines[0]
-    letters = []
+    stacks = dict()
     for i in line:
-        if i.lower() not in letters:
-            letters.append(i.lower())
-    lengths = []
-    for i in letters:
-        line2 = line.replace(i, '').replace(i.upper(), '')
-        length = react(line2)
-        print("'{}' - {}".format(i, length))
-        lengths.append(length)
-    return min(lengths)
+        if i.lower() not in stacks:
+            stacks[i.lower()] = deque()
+    line = react(line)
+    for c in stacks:
+        for i in line:
+            if i.lower() == c:
+                pass
+            elif len(stacks[c]) == 0:
+                stacks[c].append(i)
+            else:
+                ii = stacks[c].pop()
+                if i.lower() != ii.lower() or i == ii:
+                    stacks[c].append(ii)
+                    stacks[c].append(i)
+    return len(min(stacks.values(), key=lambda k: len(k)))
 
 
 if __name__ == '__main__':
