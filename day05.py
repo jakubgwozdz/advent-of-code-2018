@@ -7,12 +7,12 @@ def read_input():
     return lines
 
 
-def react(line, *, ignore=''):
+def react(line, ignore=''):
     stack = deque()
     for i in line:
         if i.lower() == ignore:
             pass
-        if len(stack) == 0:
+        elif len(stack) == 0:
             stack.append(i)
         else:
             ii = stack.pop()
@@ -28,22 +28,10 @@ def part1(lines):
 
 def part2(lines):
     line = lines[0]
-    stacks = dict()
-    for i in line:
-        if i.lower() not in stacks:
-            stacks[i.lower()] = deque()
     line = react(line)
-    for c in stacks:
-        for i in line:
-            if i.lower() == c:
-                pass
-            elif len(stacks[c]) == 0:
-                stacks[c].append(i)
-            else:
-                ii = stacks[c].pop()
-                if i.lower() != ii.lower() or i == ii:
-                    stacks[c].append(ii)
-                    stacks[c].append(i)
+    stacks = dict()
+    for c in "abcdefghijklmnopqrstuvwxyz":
+        stacks[c] = react(line, c)
     return len(min(stacks.values(), key=lambda k: len(k)))
 
 
