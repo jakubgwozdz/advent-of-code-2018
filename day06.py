@@ -25,8 +25,7 @@ def extend(r, v):
 
 def part1(lines):
     coords = [parse(line) for line in lines]
-    x0 = coords[0][0]
-    y0 = coords[0][1]
+    (x0, y0) = next(iter(coords))
     range_x = range(x0, x0 + 1)
     range_y = range(y0, y0 + 1)
     for c in coords:
@@ -45,11 +44,9 @@ def part1(lines):
         dists[c] = (0, {c})
 
     while len(queue) > 0:
-        # print("distances: {}, queue: {}".format(len(dists), queue))
 
         c = queue.popleft()
         root = dists[c]
-        # print("processing {} root {}".format(c, root))
         (x, y) = c
         if x in range_x:
             process((x + 1, y), root, dists, queue)
