@@ -25,15 +25,8 @@ def extend(r, v):
 
 def part1(lines):
     coords = [parse(line) for line in lines]
-    (x0, y0) = next(iter(coords))
-    range_x = range(x0, x0 + 1)
-    range_y = range(y0, y0 + 1)
-    for c in coords:
-        (x, y) = c
-        range_x = extend(range_x, x)
-        range_y = extend(range_y, y)
+    range_x, range_y = ranges(coords)
 
-    print("x: {}, y: {}".format(range_x, range_y))
     counter = Counter()
 
     queue = deque()
@@ -55,16 +48,11 @@ def part1(lines):
             process((x, y + 1), root, dists, queue)
             process((x, y - 1), root, dists, queue)
 
-    print("finished with queue")
-
     for x in range_x:
         for y in range_y:
             (_, closest) = dists[(x, y)]
             if len(closest) == 1:
                 counter[next(iter(closest))] += 1
-
-    print("calculated area")
-    print(counter)
 
     for x in range_x:
         cleanup_infinities((x, range_y.start), counter, dists)
@@ -74,6 +62,17 @@ def part1(lines):
         cleanup_infinities((range_x.stop - 1, y), counter, dists)
 
     return counter[max(counter, key=lambda v: counter[v])]
+
+
+def ranges(coords):
+    (x0, y0) = next(iter(coords))
+    range_x = range(x0, x0 + 1)
+    range_y = range(y0, y0 + 1)
+    for c in coords:
+        (x, y) = c
+        range_x = extend(range_x, x)
+        range_y = extend(range_y, y)
+    return range_x, range_y
 
 
 def cleanup_infinities(c, counter, dists):
@@ -102,8 +101,71 @@ def process(c1, root, distances, queue):
         queue.append(c1)
 
 
-def part2(i):
-    pass
+def distance(p1, p2):
+    (x1, y1) = p1
+    (x2, y2) = p2
+    return abs(x2 - x1) + abs(y2 - y1)
+
+
+def sum_distances(point, coords):
+    return sum([distance(point, p) for p in coords])
+
+
+def part2(lines, max_distance=10000):
+    coords = [parse(line) for line in lines]
+
+    sum_x = sum([c[0] for c in coords])
+    sum_y = sum([c[1] for c in coords])
+
+    middle_x = sum_x // len(coords)
+    middle_y = sum_y // len(coords)
+    print("x: {}, y: {}".format(middle_x, middle_y))
+
+    middle_d = sum_distances((middle_x, middle_y), coords)
+    print(middle_d)
+
+    assert middle_d < max_distance
+
+    y = middle_y
+    counter = 0
+
+    while True:
+        row = test_row(middle_x, y, coords, max_distance)
+        if len(row) > 0:
+            counter += len(row)
+            y += 1
+            middle_x = (row.stop + row.start) // 2
+        else:
+            break
+    y = middle_y - 1
+    while True:
+        row = test_row(middle_x, y, coords, max_distance)
+        if len(row) > 0:
+            counter += len(row)
+            y -= 1
+            middle_x = (row.stop + row.start) // 2
+        else:
+            break
+
+    return counter
+
+
+def test_row(middle_x, y, coords, max_distance):
+    x = middle_x
+    while True:
+        if sum_distances((x, y), coords) < max_distance:
+            x += 1
+        else:
+            break
+    stop = x
+    x = middle_x - 1
+    while True:
+        if sum_distances((x, y), coords) < max_distance:
+            x -= 1
+        else:
+            break
+
+    return range(x + 1, stop)
 
 
 if __name__ == '__main__':

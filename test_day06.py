@@ -21,8 +21,14 @@ class Test(TestCase):
 
     def test_example2(self):
         i = """\
+1, 1
+1, 6
+8, 3
+3, 4
+5, 5
+8, 9
 """.splitlines()
-        self.assertEqual(None, part2(i))
+        self.assertEqual(16, part2(i, 32))
 
     def test_part2(self):
-        self.assertEqual(None, part2(read_input()))
+        self.assertEqual(41145, part2(read_input()))
