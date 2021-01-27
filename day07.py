@@ -25,23 +25,13 @@ def part1(lines):
         dependants[b] = dependants[b]
         dependencies[b] += a
         dependencies[a] = dependencies[a]
-    for r in dependants:
-        print('{} -> {}'.format(r, dependants[r]))
-    print("--")
-    for r in dependencies:
-        print('{} <- {}'.format(r, dependencies[r]))
 
     while len(dependencies):
         c = min(filter(lambda key: len(dependencies[key]) == 0, dependencies))
-        print(c)
         result += c
         dependencies.pop(c)
         for v in dependants[c]:
             dependencies[v].remove(c)
-        # print("--")
-        # for r in dependencies:
-        #     print('{} <- {}'.format(r, dependencies[r]))
-        # break
     return result
 
 

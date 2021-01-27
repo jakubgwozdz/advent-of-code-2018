@@ -18,7 +18,7 @@ Step F must be finished before step E can begin.
         self.assertEqual("CABDFE", part1(i))
 
     def test_part1(self):
-        self.assertEqual(None, part1(read_input()))
+        self.assertEqual("GJFMDHNBCIVTUWEQYALSPXZORK", part1(read_input()))
 
     def test_example2(self):
         i = """\
